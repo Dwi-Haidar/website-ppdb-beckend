@@ -3,6 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { Request, Response, NextFunction } from "express";
 import path from "path";
 import cloudinaryConfig from "../libs/cloudinary";
+// import cloudinaryConfig from "../lib/cloudinary";
 
 cloudinaryConfig();
 
@@ -24,7 +25,7 @@ const upload = multer({
   limits: {
     fileSize: 1024 * 1024 * 4,
   },
-}).fields([{ name: "imageMurid", maxCount: 1 }]);
+}).fields([{ name: "image", maxCount: 4 }]);
 
 const multerMiddleware = () => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -61,7 +62,7 @@ const multerMiddleware = () => {
                 try {
                   if (!img.path) throw new Error("File path is missing");
                   const imageUrl = await cloudinary.uploader.upload(img.path, {
-                    folder: "Threads",
+                    folder: "PPDB",
                   });
                   return { image: imageUrl.secure_url };
                 } catch (error) {
@@ -70,27 +71,7 @@ const multerMiddleware = () => {
                 }
               })
             );
-            req.body.images = imagesUrls;
-          }
-
-          if (files.avatar) {
-            const avatar = files.avatar[0];
-            if (avatar && avatar.path) {
-              const avatarUrl = await cloudinary.uploader.upload(avatar.path, {
-                folder: "PPDB",
-              });
-              req.body.avatar = avatarUrl.secure_url;
-            }
-          }
-
-          if (files.cover) {
-            const cover = files.cover[0];
-            if (cover && cover.path) {
-              const coverUrl = await cloudinary.uploader.upload(cover.path, {
-                folder: "PPDB",
-              });
-              req.body.cover = coverUrl.secure_url;
-            }
+            req.body.image = imagesUrls;
           }
         } catch (error) {
           console.error("Error handling files:", error);

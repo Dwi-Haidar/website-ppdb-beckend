@@ -27,6 +27,7 @@ model Ppdb {
   nisn           String     @unique
   ttl            String
   nik            String     @unique
+  email          String     @unique
   noKK           String     @unique
   alamat         String
   namaAyah       String
@@ -41,10 +42,10 @@ model Ppdb {
   noTelp         String
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
-  price          Float      @default(0)
   isPaid         Boolean    @default(false)
   image          Image[]
   Kelulusan      Kelulusan?
+  Order          Order[]
 }
 
 model Image {
@@ -67,4 +68,15 @@ model Kelulusan {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id            Int      @id @default(autoincrement())
+  orderId       String   @unique
+  paymentMethod String
+  price         Float
+  ppdbId        Int
+  ppdb          Ppdb     @relation(fields: [ppdbId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

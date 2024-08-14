@@ -4,13 +4,15 @@ import cors from "cors";
 import router from "./src/route";
 import path from "path";
 import db from "./src/db";
+import bodyParser from "body-parser";
 dotenv.config();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5001;
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(bodyParser.json());
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use(router);
 

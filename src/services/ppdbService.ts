@@ -6,8 +6,6 @@ export const create = async (
   files: { [fieldname: string]: Express.Multer.File[] }
 ) => {
   try {
-    console.log("payload", payload);
-
     const ppdb = await db.ppdb.create({
       data: {
         ...payload,
@@ -18,7 +16,6 @@ export const create = async (
         // },
       },
     });
-    console.log("ppob", ppdb);
 
     // create transaction
     const midtransClient = require("midtrans-client");
@@ -47,7 +44,6 @@ export const create = async (
 
     const transaction = await snap.createTransaction(parameter);
     const transactionToken = transaction.token;
-    console.log("transactionToken:", transactionToken);
 
     const order = await db.order.create({
       data: {

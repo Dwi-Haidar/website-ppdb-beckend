@@ -58,8 +58,6 @@ model Image {
 
 model Kelulusan {
   id              Int     @id @default(autoincrement())
-  nisn            String
-  tahunKelulusan  Int
   statusKelulusan Boolean @default(false)
   ppdbId          Int     @unique
   ppdb            Ppdb    @relation(fields: [ppdbId], references: [id])

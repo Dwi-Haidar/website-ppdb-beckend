@@ -2,10 +2,12 @@ import db from "../db/index";
 import { IPpdb } from "../types/app";
 
 export const create = async (
-  payload: Omit<IPpdb, "image">,
+  payload: IPpdb,
   files: { [fieldname: string]: Express.Multer.File[] }
 ) => {
+
   try {
+    
     const ppdb = await db.ppdb.create({
       data: {
         ...payload,
@@ -57,6 +59,6 @@ export const deletePpdb = async (id: number) => {
     return ppdb;
   } catch (error) {
     console.error("Error deleting PPDB:", error);
-    throw error; 
+    throw error;
   }
 };

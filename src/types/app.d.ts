@@ -21,3 +21,11 @@ export interface IPpdb {
   image: string[];
   noTelp: string;
 }
+
+export interface IKelulusan {
+  id: number;
+  ppdbId: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

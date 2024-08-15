@@ -1,57 +1,84 @@
-// services/KelulusanService.ts
+import db from "../db";
+import { IKelulusan } from "../types/app";
 
-import { PrismaClient, Kelulusan } from "@prisma/client";
+export const createKelulusan = (payload: IKelulusan) => {
+  try {
+    
+    const kelulusan = db.kelulusan.create({
+      data: payload,
+    });
 
-const prisma = new PrismaClient();
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export class KelulusanService {
-  async createKelulusan(data: Omit<Kelulusan, "id">): Promise<Kelulusan> {
-    return await prisma.kelulusan.create({
+export const getKelulusanById = (id: number, statusKelulusan: boolean) => {
+  try {
+    const kelulusan = db.kelulusan.findUnique({
+      where: {
+        id,
+        statusKelulusan: true,
+      },
+      include: { ppdb: true },
+    });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getKelulusanByIdFalse = (id: number, statusKelulusan: boolean) => {
+  try {
+    const kelulusan = db.kelulusan.findUnique({
+      where: {
+        id,
+        statusKelulusan: false,
+      },
+      include: { ppdb: true },
+    });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllKelulusan = () => {
+  try {
+    const kelulusan = db.kelulusan.findMany({
+      include: { ppdb: true },
+    });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateKelulusan = (id: number, statusKelulusan: boolean) => {
+  try {
+    const kelulusan = db.kelulusan.update({
+      where: {
+        id,
+      },
       data: {
-        nisn: data.nisn,
-        tahunKelulusan: data.tahunKelulusan,
-        statusKelulusan: data.statusKelulusan || false,
-        ppdbId: data.ppdbId,
+        statusKelulusan,
       },
     });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
   }
+};
 
-  async getAllKelulusan(): Promise<Kelulusan[]> {
-    return await prisma.kelulusan.findMany({
-      include: {
-        ppdb: true,
+export const deleteKelulusan = (id: number) => {
+  try {
+    const kelulusan = db.kelulusan.delete({
+      where: {
+        id,
       },
     });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
   }
-
-  async getKelulusanById(id: number): Promise<Kelulusan | null> {
-    return await prisma.kelulusan.findUnique({
-      where: { id },
-      include: {
-        ppdb: true,
-      },
-    });
-  }
-
-  async updateKelulusan(
-    id: number,
-    data: Partial<Kelulusan>
-  ): Promise<Kelulusan> {
-    return await prisma.kelulusan.update({
-      where: { id },
-      data: {
-        tahunKelulusan: data.tahunKelulusan,
-        statusKelulusan: data.statusKelulusan,
-        ppdbId: data.ppdbId,
-      },
-    });
-  }
-
-  async deleteKelulusan(id: number): Promise<void> {
-    await prisma.kelulusan.delete({
-      where: { id },
-    });
-  }
-}
-
-export default new KelulusanService();
+};

@@ -4,7 +4,7 @@ import ppdbRouter from "./ppdbRouter";
 import KelulusanRouter from "./kelulusanRouter";
 const router = Router();
 router.use("/", userRouter);
-router.use("/", KelulusanRouter)
+router.use("/", KelulusanRouter);
 router.use("/", ppdbRouter);
 
 export default router;

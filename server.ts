@@ -1,16 +1,18 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import db from "../beckend-ppdb/src/db/index";
 import router from "./src/route";
 import path from "path";
+import db from "./src/db";
+import bodyParser from "body-parser";
 dotenv.config();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(bodyParser.json());
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use(router);
 

@@ -22,12 +22,13 @@ model User {
 }
 
 model Ppdb {
-  id             Int      @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   nama           String
-  nisn           String   @unique
+  nisn           String     @unique
   ttl            String
-  nik            String   @unique
-  noKK           String   @unique
+  nik            String     @unique
+  email          String     @unique
+  noKK           String     @unique
   alamat         String
   namaAyah       String
   tahunLahirAyah String
@@ -39,11 +40,12 @@ model Ppdb {
   pekerjaanIbu   String
   alamatOrtu     String
   noTelp         String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  image    Image[]
-  Kelulusan Kelulusan?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  isPaid         Boolean    @default(false)
+  image          Image[]
+  Kelulusan      Kelulusan?
+  Order          Order[]
 }
 
 model Image {
@@ -66,4 +68,15 @@ model Kelulusan {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id            Int      @id @default(autoincrement())
+  orderId       String   @unique
+  paymentMethod String
+  price         Float
+  ppdbId        Int
+  ppdb          Ppdb     @relation(fields: [ppdbId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

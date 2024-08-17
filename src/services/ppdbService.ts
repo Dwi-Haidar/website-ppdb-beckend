@@ -9,11 +9,11 @@ export const create = async (
     const ppdb = await db.ppdb.create({
       data: {
         ...payload,
-        image: {
-          create: files.image.map((img) => ({
-            url: img.filename,
-          })),
-        },
+        // image: {
+        //   create: files.image.map((img) => ({
+        //     url: img.filename,
+        //   })),
+        // },
       },
     });
 

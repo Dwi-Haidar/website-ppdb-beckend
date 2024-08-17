@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import db from "../db/index";
 
 const midtransClient = require("midtrans-client");
+var MailerLite = require("mailerlite");
 
 let apiClient = new midtransClient.Snap({
   isProduction: false,
@@ -58,6 +59,37 @@ export const webhook = async (req: Request, res: Response) => {
           },
         });
         res.sendStatus(200);
+
+        const params = {
+          email: "adindo48@gmail.com",
+          fields: {
+            name: "",
+            last_name: updateUser.nama,
+            company: "SMPI Karya Mukti",
+            country: "Indonesia",
+            city: "Bogor",
+            phone: "02511234567",
+            state: "Citereup",
+            z_i_p: "019231",
+          },
+          groups: ["129928469175862640"],
+          status: "active",
+          subscribed_at: "2021-08-31 14:22:08",
+          ip_address: null,
+          opted_in_at: null,
+          optin_ip: null,
+          unsubscribed_at: null,
+        };
+
+        MailerLite.subscribers
+          .createOrUpdate(params)
+          .then((response: { data: any }) => {
+            console.log(response.data);
+          })
+          .catch((error: { response: { data: any } }) => {
+            if (error.response) console.log(error.response.data);
+          });
+
         break;
 
       case "cancel":

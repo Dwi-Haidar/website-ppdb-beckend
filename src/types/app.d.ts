@@ -26,7 +26,7 @@ export interface IPpdb {
 export interface IKelulusan {
   id: number;
   ppdbId: number;
-  status: string;
+  statusKelulusan: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

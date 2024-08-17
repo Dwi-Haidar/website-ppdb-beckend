@@ -1,17 +1,35 @@
 import db from "../db";
 import { IKelulusan } from "../types/app";
 
-export const createKelulusan = (payload: IKelulusan) => {
+export const createKelulusan = async (payload: IKelulusan) => {
   try {
-    const kelulusan = db.kelulusan.create({
-      data: {
-        ...payload,
-      },
+    // Cek apakah kelulusan dengan `ppdbId` yang sama sudah ada
+    const existingKelulusan = await db.kelulusan.findUnique({
+      where: { ppdbId: payload.ppdbId },
     });
 
-    return kelulusan;
+    if (existingKelulusan) {
+      // Jika sudah ada, lakukan update status
+      const updatedKelulusan = await db.kelulusan.update({
+        where: { ppdbId: payload.ppdbId },
+        data: {
+          statusKelulusan: payload.statusKelulusan,
+          updatedAt: new Date(), // Update timestamp
+        },
+      });
+      return updatedKelulusan;
+    } else {
+      // Jika belum ada, buat baru
+      const kelulusan = await db.kelulusan.create({
+        data: {
+          ...payload,
+        },
+      });
+      return kelulusan;
+    }
   } catch (error) {
     console.log(error);
+    throw error; // Lempar error agar bisa ditangani di controller
   }
 };
 

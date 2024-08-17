@@ -19,7 +19,7 @@ export interface IPpdb {
   pendidikanIbu: string;
   pekerjaanIbu: string;
   alamatOrtu: string;
-  image: string[];
+  // image: string[];
   noTelp: string;
 }
 

@@ -5,7 +5,7 @@ const midtransClient = require("midtrans-client");
 
 const API_URL = "https://api.mailerlite.com/api/v2";
 const API_KEY = process.env.MAILERLITE_API_KEY;
-const GROUP_ID = "129928469175862640";
+const GROUP_ID = "98537036938479128";
 
 const apiClient = new midtransClient.Snap({
   isProduction: false,

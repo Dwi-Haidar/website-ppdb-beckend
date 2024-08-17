@@ -23,8 +23,6 @@ export const create = async (
       isProduction: false,
       serverKey: "SB-Mid-server-D7115u3C9p40iVIEBH0Xx7-P",
     });
-    console.log("ppdb", ppdb.id);
-    console.log("ppdb", ppdb);
     const random = Math.floor(Math.random() * 1000);
     let parameter = {
       transaction_details: {

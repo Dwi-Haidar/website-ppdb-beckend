@@ -24,15 +24,9 @@ export const create = async (
       serverKey: "SB-Mid-server-D7115u3C9p40iVIEBH0Xx7-P",
     });
 
-    function generateRandomSixDigitNumber() {
-      const randomNumber = Math.floor(Math.random() * 1000000);
-      return randomNumber.toString().padStart(6, "0");
-    }
-
-    const randomSixDigitNumber = generateRandomSixDigitNumber();
     let parameter = {
       transaction_details: {
-        order_id: "ORDER" + randomSixDigitNumber + ppdb.id,
+        order_id: "ORDER" + ppdb.id,
         gross_amount: 10000,
       },
       credit_card: {

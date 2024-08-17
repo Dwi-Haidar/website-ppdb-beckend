@@ -59,12 +59,13 @@ model Image {
 }
 
 model Kelulusan {
-  id              Int      @id @default(autoincrement())
-  statusKelulusan Boolean  @default(false)
-  ppdbId          Int      @unique
-  ppdb            Ppdb     @relation(fields: [ppdbId], references: [id])
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id              Int     @id @default(autoincrement())
+  statusKelulusan Boolean @default(false)
+  ppdbId          Int     @unique
+  ppdb            Ppdb    @relation(fields: [ppdbId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Order {

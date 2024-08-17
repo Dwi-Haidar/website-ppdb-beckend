@@ -3,9 +3,10 @@ import { IKelulusan } from "../types/app";
 
 export const createKelulusan = (payload: IKelulusan) => {
   try {
-    
     const kelulusan = db.kelulusan.create({
-      data: payload,
+      data: {
+        ...payload,
+      },
     });
 
     return kelulusan;

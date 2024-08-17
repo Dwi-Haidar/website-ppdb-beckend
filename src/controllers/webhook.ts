@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import db from "../db/index";
-
+import axios from "axios";
 const midtransClient = require("midtrans-client");
-var MailerLite = require("mailerlite");
 
-let apiClient = new midtransClient.Snap({
+const API_URL = "https://api.mailerlite.com/api/v2";
+const API_KEY = process.env.MAILERLITE_API_KEY;
+const GROUP_ID = "129928469175862640";
+
+const apiClient = new midtransClient.Snap({
   isProduction: false,
   serverKey: "SB-Mid-server-D7115u3C9p40iVIEBH0Xx7-P",
   clientKey: "SB-Mid-client-xwt7dO0ikf2dVydv",
@@ -12,10 +15,10 @@ let apiClient = new midtransClient.Snap({
 
 export const webhook = async (req: Request, res: Response) => {
   try {
-    console.log(" mashook webhook");
+    console.log("Received webhook notification");
 
     const notificationJson = req.body;
-    console.log("notificationJson", notificationJson);
+    console.log("Notification JSON:", notificationJson);
 
     const statusResponse = await apiClient.transaction.notification(
       notificationJson
@@ -30,66 +33,66 @@ export const webhook = async (req: Request, res: Response) => {
     console.log(
       `Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`
     );
-    const orderIdOnly = orderId.split("ORDER")[1];
+
+    const parts = orderId.split("ORDER")[1];
+    const extractedIdString = parts.substring(6);
+    const extractedId = parseInt(extractedIdString, 10);
+
     switch (transactionStatus) {
       case "capture":
         if (fraudStatus === "accept") {
-          const updateOrder = await db.order.update({
-            where: {
-              id: orderId,
-            },
+          await db.order.update({
+            where: { id: extractedId },
             data: {
               paymentMethod:
                 notificationJson.payment_type + notificationJson.issuer,
             },
           });
           console.log(`Order ${orderId} captured and accepted.`);
-          res.sendStatus(200);
         }
         break;
 
       case "settlement":
-        console.log(`Order ${orderId} settled.`);
         const updateUser = await db.ppdb.update({
-          where: {
-            id: orderIdOnly,
-          },
-          data: {
-            isPaid: true,
-          },
+          where: { id: extractedId },
+          data: { isPaid: true },
         });
-        res.sendStatus(200);
+        console.log("updateUser", updateUser);
+        console.log("updateUser", updateUser.email);
 
-        const params = {
-          email: "adindo48@gmail.com",
-          fields: {
-            name: "",
-            last_name: updateUser.nama,
-            company: "SMPI Karya Mukti",
-            country: "Indonesia",
-            city: "Bogor",
-            phone: "02511234567",
-            state: "Citereup",
-            z_i_p: "019231",
-          },
-          groups: ["129928469175862640"],
-          status: "active",
-          subscribed_at: "2021-08-31 14:22:08",
-          ip_address: null,
-          opted_in_at: null,
-          optin_ip: null,
-          unsubscribed_at: null,
-        };
+        console.log(`Order ${orderId} settled.`);
 
-        MailerLite.subscribers
-          .createOrUpdate(params)
-          .then((response: { data: any }) => {
-            console.log(response.data);
-          })
-          .catch((error: { response: { data: any } }) => {
-            if (error.response) console.log(error.response.data);
-          });
+        // Add subscriber to MailerLite group
+        try {
+          const response = await axios.post(
+            `${API_URL}/subscribers`,
+            { email: updateUser.email },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-MailerLite-ApiKey": API_KEY,
+              },
+            }
+          );
 
+          const subscriberId = response.data.id;
+          await axios.post(
+            `${API_URL}/groups/${GROUP_ID}/subscribers`,
+            { subscribers: [subscriberId], email: updateUser.email },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-MailerLite-ApiKey": API_KEY,
+              },
+            }
+          );
+
+          console.log(
+            `Subscriber ${updateUser.email} added to group: ${GROUP_ID}`
+          );
+        } catch (mailError) {
+          console.error("Error adding subscriber to MailerLite:", mailError);
+        }
         break;
 
       case "cancel":
@@ -98,19 +101,19 @@ export const webhook = async (req: Request, res: Response) => {
         console.log(
           `Order ${orderId} failed with status ${transactionStatus}.`
         );
-        res.sendStatus(200);
         break;
 
       case "pending":
         console.log(`Order ${orderId} is pending.`);
-        res.sendStatus(200);
         break;
 
       default:
         console.log(`Unknown transaction status ${transactionStatus}.`);
         res.sendStatus(400);
-        break;
+        return;
     }
+
+    res.sendStatus(200);
   } catch (error) {
     console.error("Error processing notification:", error);
     res.sendStatus(500);

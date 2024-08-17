@@ -9,11 +9,11 @@ export const create = async (
     const ppdb = await db.ppdb.create({
       data: {
         ...payload,
-        image: {
-          create: files.image.map((img) => ({
-            url: img.filename,
-          })),
-        },
+        // image: {
+        //   create: files.image.map((img) => ({
+        //     url: img.filename,
+        //   })),
+        // },
       },
     });
 
@@ -23,10 +23,16 @@ export const create = async (
       isProduction: false,
       serverKey: "SB-Mid-server-D7115u3C9p40iVIEBH0Xx7-P",
     });
-    const random = Math.floor(Math.random() * 1000);
+
+    function generateRandomSixDigitNumber() {
+      const randomNumber = Math.floor(Math.random() * 1000000);
+      return randomNumber.toString().padStart(6, "0");
+    }
+
+    const randomSixDigitNumber = generateRandomSixDigitNumber();
     let parameter = {
       transaction_details: {
-        order_id: "ORDER" + random + ppdb.id,
+        order_id: "ORDER" + randomSixDigitNumber + ppdb.id,
         gross_amount: 10000,
       },
       credit_card: {

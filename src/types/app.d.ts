@@ -5,6 +5,7 @@ export type AuthMiddlewareData = {
 export interface IPpdb {
   nama: string;
   nisn: string;
+  email: string;
   ttl: string;
   nik: string;
   noKK: string;
@@ -18,6 +19,14 @@ export interface IPpdb {
   pendidikanIbu: string;
   pekerjaanIbu: string;
   alamatOrtu: string;
-  image: string[];
+  // image: string[];
   noTelp: string;
+}
+
+export interface IKelulusan {
+  id: number;
+  ppdbId: number;
+  statusKelulusan: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }

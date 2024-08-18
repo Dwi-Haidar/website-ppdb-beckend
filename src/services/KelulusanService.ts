@@ -1,57 +1,103 @@
-// services/KelulusanService.ts
+import db from "../db";
+import { IKelulusan } from "../types/app";
 
-import { PrismaClient, Kelulusan } from "@prisma/client";
+export const createKelulusan = async (payload: IKelulusan) => {
+  try {
+    // Cek apakah kelulusan dengan `ppdbId` yang sama sudah ada
+    const existingKelulusan = await db.kelulusan.findUnique({
+      where: { ppdbId: payload.ppdbId },
+    });
 
-const prisma = new PrismaClient();
+    if (existingKelulusan) {
+      // Jika sudah ada, lakukan update status
+      const updatedKelulusan = await db.kelulusan.update({
+        where: { ppdbId: payload.ppdbId },
+        data: {
+          statusKelulusan: payload.statusKelulusan,
+          updatedAt: new Date(), // Update timestamp
+        },
+      });
+      return updatedKelulusan;
+    } else {
+      // Jika belum ada, buat baru
+      const kelulusan = await db.kelulusan.create({
+        data: {
+          ...payload,
+        },
+      });
+      return kelulusan;
+    }
+  } catch (error) {
+    console.log(error);
+    throw error; // Lempar error agar bisa ditangani di controller
+  }
+};
 
-export class KelulusanService {
-  async createKelulusan(data: Omit<Kelulusan, "id">): Promise<Kelulusan> {
-    return await prisma.kelulusan.create({
+export const getKelulusanById = (id: number, statusKelulusan: boolean) => {
+  try {
+    const kelulusan = db.kelulusan.findUnique({
+      where: {
+        id,
+        statusKelulusan: true,
+      },
+      include: { ppdb: true },
+    });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getKelulusanByIdFalse = (id: number, statusKelulusan: boolean) => {
+  try {
+    const kelulusan = db.kelulusan.findUnique({
+      where: {
+        id,
+        statusKelulusan: false,
+      },
+      include: { ppdb: true },
+    });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllKelulusan = () => {
+  try {
+    const kelulusan = db.kelulusan.findMany({
+      include: { ppdb: true },
+    });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateKelulusan = (id: number, statusKelulusan: boolean) => {
+  try {
+    const kelulusan = db.kelulusan.update({
+      where: {
+        id,
+      },
       data: {
-        nisn: data.nisn,
-        tahunKelulusan: data.tahunKelulusan,
-        statusKelulusan: data.statusKelulusan || false,
-        ppdbId: data.ppdbId,
+        statusKelulusan,
       },
     });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
   }
+};
 
-  async getAllKelulusan(): Promise<Kelulusan[]> {
-    return await prisma.kelulusan.findMany({
-      include: {
-        ppdb: true,
+export const deleteKelulusan = (id: number) => {
+  try {
+    const kelulusan = db.kelulusan.delete({
+      where: {
+        id,
       },
     });
+    return kelulusan;
+  } catch (error) {
+    console.log(error);
   }
-
-  async getKelulusanById(id: number): Promise<Kelulusan | null> {
-    return await prisma.kelulusan.findUnique({
-      where: { id },
-      include: {
-        ppdb: true,
-      },
-    });
-  }
-
-  async updateKelulusan(
-    id: number,
-    data: Partial<Kelulusan>
-  ): Promise<Kelulusan> {
-    return await prisma.kelulusan.update({
-      where: { id },
-      data: {
-        tahunKelulusan: data.tahunKelulusan,
-        statusKelulusan: data.statusKelulusan,
-        ppdbId: data.ppdbId,
-      },
-    });
-  }
-
-  async deleteKelulusan(id: number): Promise<void> {
-    await prisma.kelulusan.delete({
-      where: { id },
-    });
-  }
-}
-
-export default new KelulusanService();
+};

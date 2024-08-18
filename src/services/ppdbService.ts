@@ -44,10 +44,12 @@ export const create = async (
       isProduction: false,
       serverKey: "SB-Mid-server-D7115u3C9p40iVIEBH0Xx7-P",
     });
+    const random = Math.floor(Math.random() * 100000);
+    const randomStr = random.toString().padStart(6, "0");
 
     let parameter = {
       transaction_details: {
-        order_id: "ORDER" + ppdb.id,
+        order_id: "ORDER" + randomStr + ppdb.id,
         gross_amount: 10000,
       },
       credit_card: {

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import db from "../beckend-ppdb/src/db/index";
+import db from "../beckend_ppdb/src/db";
 import router from "./src/route";
 import path from "path";
 dotenv.config();

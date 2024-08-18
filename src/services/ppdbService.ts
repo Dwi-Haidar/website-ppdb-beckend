@@ -6,6 +6,28 @@ export const create = async (
   files: { [fieldname: string]: Express.Multer.File[] }
 ) => {
   try {
+    const existingPpdb = await db.ppdb.findFirst({
+      where: {
+        OR: [
+          { nik: payload.nik },
+          { nisn: payload.nisn },
+          { noKK: payload.noKK },
+          { email: payload.email },
+        ],
+      },
+    });
+
+    if (existingPpdb) {
+      if (existingPpdb.nik === payload.nik) {
+        throw new Error("NIK sudah terdaftar");
+      } else if (existingPpdb.nisn === payload.nisn) {
+        throw new Error("NISN sudah terdaftar");
+      } else if (existingPpdb.noKK === payload.noKK) {
+        throw new Error("NoKK sudah terdaftar");
+      } else if (existingPpdb.email === payload.email) {
+        throw new Error("Email sudah terdaftar");
+      }
+    }
     const ppdb = await db.ppdb.create({
       data: {
         ...payload,
@@ -17,7 +39,6 @@ export const create = async (
       },
     });
 
-    // create transaction
     const midtransClient = require("midtrans-client");
     let snap = new midtransClient.Snap({
       isProduction: false,
@@ -59,8 +80,11 @@ export const create = async (
       order,
       transactionToken,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating PPDB:", error);
+    if (error.message === "NIK sudah terdaftar") {
+      throw new Error("NIK sudah terdaftar");
+    }
     throw error;
   }
 };

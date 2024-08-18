@@ -37,6 +37,7 @@ export const webhook = async (req: Request, res: Response) => {
     const parts = orderId.split("ORDER")[1];
     const extractedIdString = parts.substring(6);
     const extractedId = parseInt(extractedIdString, 10);
+    console.log("Extracted ID:", extractedId);
 
     switch (transactionStatus) {
       case "capture":
@@ -57,10 +58,6 @@ export const webhook = async (req: Request, res: Response) => {
           where: { id: extractedId },
           data: { isPaid: true },
         });
-        console.log("updateUser", updateUser);
-        console.log("updateUser", updateUser.email);
-
-        console.log(`Order ${orderId} settled.`);
 
         // Add subscriber to MailerLite group
         try {

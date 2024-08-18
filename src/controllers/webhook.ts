@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import db from "../db/index";
-import axios from "axios";
+import nodemailer from "nodemailer";
+
 const midtransClient = require("midtrans-client");
 
 const API_URL = "https://api.mailerlite.com/api/v2";
@@ -60,36 +61,40 @@ export const webhook = async (req: Request, res: Response) => {
         });
 
         // Add subscriber to MailerLite group
-        try {
-          const response = await axios.post(
-            `${API_URL}/subscribers`,
-            { email: updateUser.email },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                "X-MailerLite-ApiKey": API_KEY,
-              },
-            }
-          );
+        const transporter = nodemailer.createTransport({
+          service: "gmail", // Gmail service
+          host: "smtp.gmail.com",
+          port: 587, // Port for TLS
+          secure: false, // Use TLS
+          auth: {
+            user: process.env.GMAIL_USER, // Use environment variable
+            pass: process.env.GMAIL_PASS, // Use environment variable
+          },
+        });
 
-          const subscriberId = response.data.id;
-          await axios.post(
-            `${API_URL}/groups/${GROUP_ID}/subscribers`,
-            { subscribers: [subscriberId], email: updateUser.email },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                "X-MailerLite-ApiKey": API_KEY,
-              },
-            }
-          );
+        console.log("Transporter created:", transporter);
+        const now = new Date().getTime();
+        const date = new Date(now); // Define email options
+        const mailOptions = {
+          from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`, // Sender address
+          to: updateUser.email,
+          subject: "Pembayaran Success",
+          text: `Selamat telah melakukan membayar PPDB SMPI Karya Mukti. Terima kasih.`,
+        };
 
-          console.log(
-            `Subscriber ${updateUser.email} added to group: ${GROUP_ID}`
-          );
-        } catch (mailError) {
-          console.error("Error adding subscriber to MailerLite:", mailError);
-        }
+        // Send email
+        transporter.sendMail(
+          mailOptions,
+          (error: any, info: { response: any; messageId: any }) => {
+            if (error) {
+              console.error("Error sending email:", error);
+              return res.status(500).send("Failed to send email");
+            }
+            console.log("Email sent:", info.response);
+            console.log("Message sent: %s", info.messageId);
+            res.status(200).send("Email sent successfully");
+          }
+        );
         break;
 
       case "cancel":

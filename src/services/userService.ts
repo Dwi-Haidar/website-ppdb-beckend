@@ -24,7 +24,7 @@ export const login = async (
     throw new Error("User or password is not valid");
   }
 
-  const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY!, {
+  const token = jwt.sign({ id: user.id }, `${process.env.SECRET_KEY}`, {
     expiresIn: "1d",
   });
 

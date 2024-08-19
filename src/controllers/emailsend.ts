@@ -7,21 +7,18 @@ export const sendEmail = async (req: Request, res: Response) => {
 
     // Create a transporter using Gmail service
     const transporter = nodemailer.createTransport({
-      service: "gmail", // Gmail service
+      service: "gmail",
       host: "smtp.gmail.com",
-      port: 587, // Port for TLS
-      secure: false, // Use TLS
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.GMAIL_USER, // Use environment variable
-        pass: process.env.GMAIL_PASS, // Use environment variable
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
       },
     });
 
-    console.log("Transporter created:", transporter);
-
-    // Define email options
     const mailOptions = {
-      from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`, // Sender address
+      from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: "Pemberitahuan Kelulusan dan Pengambilan Seragam",
       text: `

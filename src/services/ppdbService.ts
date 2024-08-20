@@ -6,6 +6,28 @@ export const create = async (
   files: { [fieldname: string]: Express.Multer.File[] }
 ) => {
   try {
+    const existingPpdb = await db.ppdb.findFirst({
+      where: {
+        OR: [
+          { nik: payload.nik },
+          { nisn: payload.nisn },
+          { noKK: payload.noKK },
+          { email: payload.email },
+        ],
+      },
+    });
+
+    if (existingPpdb) {
+      if (existingPpdb.nik === payload.nik) {
+        throw new Error("NIK sudah terdaftar");
+      } else if (existingPpdb.nisn === payload.nisn) {
+        throw new Error("NISN sudah terdaftar");
+      } else if (existingPpdb.noKK === payload.noKK) {
+        throw new Error("NoKK sudah terdaftar");
+      } else if (existingPpdb.email === payload.email) {
+        throw new Error("Email sudah terdaftar");
+      }
+    }
     const ppdb = await db.ppdb.create({
       data: {
         ...payload,
@@ -14,6 +36,7 @@ export const create = async (
             url: img.filename,
           })),
         },
+        fotoMurid: files.fotoMurid ? files.fotoMurid[0].filename : "",
       },
     });
 
@@ -23,12 +46,10 @@ export const create = async (
       isProduction: false,
       serverKey: "SB-Mid-server-D7115u3C9p40iVIEBH0Xx7-P",
     });
-    const random = Math.floor(Math.random() * 100000);
-    const randomStr = random.toString().padStart(6, "0");
 
     let parameter = {
       transaction_details: {
-        order_id: "ORDER" + randomStr + ppdb.id,
+        order_id: "ORDER" + ppdb.id,
         gross_amount: 10000,
       },
       credit_card: {
@@ -61,8 +82,11 @@ export const create = async (
       order,
       transactionToken,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating PPDB:", error);
+    if (error.message === "NIK sudah terdaftar") {
+      throw new Error("NIK sudah terdaftar");
+    }
     throw error;
   }
 };
@@ -71,7 +95,7 @@ export const getPpdb = async (id: number) => {
   try {
     const ppdb = await db.ppdb.findUnique({
       where: { id },
-      include: { image: true },
+      include: { image: true, Kelulusan: true, Order: true },
     });
     return ppdb;
   } catch (error) {
@@ -83,7 +107,7 @@ export const getPpdb = async (id: number) => {
 export const getsPpdb = async () => {
   try {
     const ppdb = await db.ppdb.findMany({
-      include: { image: true },
+      include: { image: true, Kelulusan: true, Order: true },
     });
     return ppdb;
   } catch (error) {

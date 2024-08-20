@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import db from "../db/index";
 import nodemailer from "nodemailer";
+import { log } from "console";
 
 const midtransClient = require("midtrans-client");
 
@@ -16,10 +17,7 @@ const apiClient = new midtransClient.Snap({
 
 export const webhook = async (req: Request, res: Response) => {
   try {
-    console.log("Received webhook notification");
-
     const notificationJson = req.body;
-    console.log("Notification JSON:", notificationJson);
 
     const statusResponse = await apiClient.transaction.notification(
       notificationJson
@@ -38,7 +36,6 @@ export const webhook = async (req: Request, res: Response) => {
     const parts = orderId.split("ORDER")[1];
     const extractedIdString = parts.substring(6);
     const extractedId = parseInt(extractedIdString, 10);
-    console.log("Extracted ID:", extractedId);
 
     switch (transactionStatus) {
       case "capture":
@@ -62,39 +59,34 @@ export const webhook = async (req: Request, res: Response) => {
 
         // Add subscriber to MailerLite group
         const transporter = nodemailer.createTransport({
-          service: "gmail", // Gmail service
+          service: "gmail",
           host: "smtp.gmail.com",
-          port: 587, // Port for TLS
-          secure: false, // Use TLS
+          port: 587,
+          secure: false,
           auth: {
-            user: process.env.GMAIL_USER, // Use environment variable
-            pass: process.env.GMAIL_PASS, // Use environment variable
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS,
           },
         });
 
-        console.log("Transporter created:", transporter);
         const now = new Date().getTime();
-        const date = new Date(now); // Define email options
+        const date = new Date(now);
         const mailOptions = {
-          from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`, // Sender address
+          from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`,
           to: updateUser.email,
           subject: "Pembayaran Success",
           text: `Selamat telah melakukan membayar PPDB SMPI Karya Mukti. Terima kasih.`,
         };
 
-        // Send email
-        transporter.sendMail(
-          mailOptions,
-          (error: any, info: { response: any; messageId: any }) => {
-            if (error) {
-              console.error("Error sending email:", error);
-              return res.status(500).send("Failed to send email");
-            }
-            console.log("Email sent:", info.response);
-            console.log("Message sent: %s", info.messageId);
-            res.status(200).send("Email sent successfully");
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error("Error sending email:", error);
+            return res.status(500).send("Failed to send email");
           }
-        );
+          console.log("Email sent:", info.response);
+          console.log("Message sent: %s", info.messageId);
+          res.status(200).send("Email sent successfully");
+        });
         break;
 
       case "cancel":

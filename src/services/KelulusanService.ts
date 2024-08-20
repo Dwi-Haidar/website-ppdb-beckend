@@ -3,13 +3,13 @@ import { IKelulusan } from "../types/app";
 
 export const createKelulusan = async (payload: IKelulusan) => {
   try {
-    // Cek apakah kelulusan dengan `ppdbId` yang sama sudah ada
+
     const existingKelulusan = await db.kelulusan.findUnique({
       where: { ppdbId: payload.ppdbId },
     });
 
     if (existingKelulusan) {
-      // Jika sudah ada, lakukan update status
+      
       const updatedKelulusan = await db.kelulusan.update({
         where: { ppdbId: payload.ppdbId },
         data: {

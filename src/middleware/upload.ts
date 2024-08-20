@@ -3,7 +3,6 @@ import { v2 as cloudinary } from "cloudinary";
 import { Request, Response, NextFunction } from "express";
 import path from "path";
 import cloudinaryConfig from "../libs/cloudinary";
-// import cloudinaryConfig from "../lib/cloudinary";
 
 cloudinaryConfig();
 
@@ -25,7 +24,10 @@ const upload = multer({
   limits: {
     fileSize: 1024 * 1024 * 4,
   },
-}).fields([{ name: "image", maxCount: 4 }]);
+}).fields([
+  { name: "image", maxCount: 4 },
+  { name: "fotoMurid", maxCount: 1 },
+]);
 
 const multerMiddleware = () => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -72,6 +74,19 @@ const multerMiddleware = () => {
               })
             );
             req.body.image = imagesUrls;
+          }
+
+          if (files.fotoMurid) {
+            const fotoMuridFile = files.fotoMurid[0];
+            if (fotoMuridFile && fotoMuridFile.path) {
+              const fotoMuridUrl = await cloudinary.uploader.upload(
+                fotoMuridFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoMurid = fotoMuridUrl.secure_url;
+            }
           }
         } catch (error) {
           console.error("Error handling files:", error);

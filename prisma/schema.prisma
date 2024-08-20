@@ -44,6 +44,7 @@ model Ppdb {
   updatedAt      DateTime   @updatedAt
   isPaid         Boolean    @default(false)
   image          Image[]
+  fotoMurid      String
   Kelulusan      Kelulusan?
   Order          Order[]
 }

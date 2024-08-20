@@ -36,6 +36,7 @@ export const create = async (
             url: img.filename,
           })),
         },
+        fotoMurid: files.fotoMurid ? files.fotoMurid[0].filename : "",
       },
     });
 
@@ -94,7 +95,7 @@ export const getPpdb = async (id: number) => {
   try {
     const ppdb = await db.ppdb.findUnique({
       where: { id },
-      include: { image: true },
+      include: { image: true, Kelulusan: true, Order: true },
     });
     return ppdb;
   } catch (error) {
@@ -106,7 +107,7 @@ export const getPpdb = async (id: number) => {
 export const getsPpdb = async () => {
   try {
     const ppdb = await db.ppdb.findMany({
-      include: { image: true },
+      include: { image: true, Kelulusan: true, Order: true },
     });
     return ppdb;
   } catch (error) {

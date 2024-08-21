@@ -4,10 +4,12 @@ import * as ppdbService from "../services/ppdbService";
 export const createPpdb = async (req: Request, res: Response) => {
   try {
     const { body } = req;
+    console.log(body);
     const ppdb = await ppdbService.create(
       body,
       req.files as { [fieldname: string]: Express.Multer.File[] }
     );
+    console.log(ppdb);
     res.json({
       status: true,
       message: "Create Success",

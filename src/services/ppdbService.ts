@@ -37,10 +37,13 @@ export const create = async (
           })),
         },
         fotoMurid: files.fotoMurid ? files.fotoMurid[0].filename : "",
+        fotoKK: files.fotoKK ? files.fotoKK[0].filename : "",
+        fotoAkta: files.fotoAkta ? files.fotoAkta[0].filename : "",
+        fotoIjazah: files.fotoIjazah ? files.fotoIjazah[0].filename : "",
+        
       },
     });
 
-    // create transaction
     const midtransClient = require("midtrans-client");
     let snap = new midtransClient.Snap({
       isProduction: false,
@@ -49,10 +52,9 @@ export const create = async (
     const random = Math.floor(Math.random() * 100000);
     const randomStr = random.toString().padStart(6, "0");
 
-
     let parameter = {
       transaction_details: {
-        order_id: "ORDER" +  randomStr + ppdb.id,
+        order_id: "ORDER" + randomStr + ppdb.id,
         gross_amount: 10000,
       },
       credit_card: {

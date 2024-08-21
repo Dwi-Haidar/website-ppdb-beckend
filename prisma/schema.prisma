@@ -14,7 +14,8 @@ model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
-  isAdmin   Boolean  @default(false)
+  fotoBukti String?
+  Ispaid    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -22,13 +23,14 @@ model User {
 }
 
 model Ppdb {
-  id             Int        @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   nama           String
-  nisn           String     @unique
+  userId         Int?
+  nisn           String   @unique
   ttl            String
-  nik            String     @unique
-  email          String     @unique
-  noKK           String     @unique
+  nik            String   @unique
+  email          String   @unique
+  noKK           String   @unique
   alamat         String
   namaAyah       String
   tahunLahirAyah String
@@ -40,13 +42,17 @@ model Ppdb {
   pekerjaanIbu   String
   alamatOrtu     String
   noTelp         String
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-  isPaid         Boolean    @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  isPaid         Boolean  @default(false)
   image          Image[]
   fotoMurid      String
-  Kelulusan      Kelulusan?
-  Order          Order[]
+  fotoKK         String
+  fotoIjazah     String
+  fotoAkta       String
+
+  Kelulusan Kelulusan?
+  Order     Order[]
 }
 
 model Image {
@@ -78,4 +84,32 @@ model Order {
   ppdb          Ppdb     @relation(fields: [ppdbId], references: [id])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model EktraKulikuler {
+  id        Int    @id @default(autoincrement())
+  name      String
+  fotoEktra String
+  Article   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Galeri {
+  id         Int      @id @default(autoincrement())
+  name       String
+  fotoGaleri String
+  Article    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Berita {
+  id         Int      @id @default(autoincrement())
+  name       String
+  fotoBerita String
+  Article    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

@@ -27,6 +27,12 @@ const upload = multer({
 }).fields([
   { name: "image", maxCount: 4 },
   { name: "fotoMurid", maxCount: 1 },
+  { name: "fotoKK", maxCount: 1 },
+  { name: "fotoAkta", maxCount: 1 },
+  { name: "fotoIjazah", maxCount: 1 },
+  { name: "fotoGaleri", maxCount: 1 },
+  { name: "fotoEktra", maxCount: 1 },
+  { name: "fotoBerita", maxCount: 1 },
 ]);
 
 const multerMiddleware = () => {
@@ -86,6 +92,96 @@ const multerMiddleware = () => {
                 }
               );
               req.body.fotoMurid = fotoMuridUrl.secure_url;
+            }
+          }
+          if (files.fotoMurid) {
+            const fotoMuridFile = files.fotoMurid[0];
+            if (fotoMuridFile && fotoMuridFile.path) {
+              const fotoMuridUrl = await cloudinary.uploader.upload(
+                fotoMuridFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoMurid = fotoMuridUrl.secure_url;
+            }
+          }
+
+          if (files.fotoKK) {
+            const fotoKKFile = files.fotoKK[0];
+            if (fotoKKFile && fotoKKFile.path) {
+              const fotoKKUrl = await cloudinary.uploader.upload(
+                fotoKKFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoKK = fotoKKUrl.secure_url;
+            }
+          }
+
+          if (files.fotoAkta) {
+            const fotoAktaFile = files.fotoAkta[0];
+            if (fotoAktaFile && fotoAktaFile.path) {
+              const fotoAktaUrl = await cloudinary.uploader.upload(
+                fotoAktaFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoAkta = fotoAktaUrl.secure_url;
+            }
+          }
+
+          if (files.fotoIjazah) {
+            const fotoIjazahFile = files.fotoIjazah[0];
+            if (fotoIjazahFile && fotoIjazahFile.path) {
+              const fotoIjazahUrl = await cloudinary.uploader.upload(
+                fotoIjazahFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoIjazah = fotoIjazahUrl.secure_url;
+            }
+          }
+
+          if (files.fotoEktra) {
+            const fotoEktraFile = files.fotoEktra[0];
+            if (fotoEktraFile && fotoEktraFile.path) {
+              const fotoEktraUrl = await cloudinary.uploader.upload(
+                fotoEktraFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoEktra = fotoEktraUrl.secure_url;
+            }
+          }
+
+          if (files.fotoGaleri) {
+            const fotoGaleriFile = files.fotoGaleri[0];
+            if (fotoGaleriFile && fotoGaleriFile.path) {
+              const fotoGaleriUrl = await cloudinary.uploader.upload(
+                fotoGaleriFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoGaleri = fotoGaleriUrl.secure_url;
+            }
+          }
+
+          if (files.fotoBerita) {
+            const fotoBeritaFile = files.fotoBerita[0];
+            if (fotoBeritaFile && fotoBeritaFile.path) {
+              const fotoBeritaUrl = await cloudinary.uploader.upload(
+                fotoBeritaFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoBerita = fotoBeritaUrl.secure_url;
             }
           }
         } catch (error) {

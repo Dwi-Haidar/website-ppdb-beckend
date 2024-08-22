@@ -73,7 +73,7 @@ export const webhook = async (req: Request, res: Response) => {
         const date = new Date(now);
         const mailOptions = {
           from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`,
-          to: updateUser.email,
+          to: updateUser.email as string,
           subject: "Pembayaran Success",
           text: `Selamat telah melakukan membayar PPDB SMPI Karya Mukti. Terima kasih.`,
         };

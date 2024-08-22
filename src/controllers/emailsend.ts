@@ -56,3 +56,54 @@ Manajemen SMPI Karya Mukti`,
     res.status(500).send("Failed to send email");
   }
 };
+export const sendEmailVerifPembayaranFormulir = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { email, name, link } = req.body;
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`,
+      to: email,
+      subject: "Pembayaran awal Formulir",
+      html: `
+        <p>Terimakasih  ${name},</p>
+          <p>Terima kasih telah melakukan pembayaran awal formulir untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
+
+          <p>Dengan ini kami mengonfirmasi bahwa pembayaran Anda telah diterima. Selanjutnya, Anda diharapkan untuk melakukan langkah berikut:</p>
+
+          <p>Dengan Mengklick tombol dibawah ini</p>
+          <p>Terimakasih.</p>
+
+        <p>
+          <a href="${link}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Konfirmasi Kehadiran</a>
+        </p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        return res.status(500).send("Failed to send email");
+      }
+      console.log("Email sent:", info.response);
+      console.log("Message sent: %s", info.messageId);
+      res.status(200).send("Email sent successfully");
+    });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).send("Failed to send email");
+  }
+};

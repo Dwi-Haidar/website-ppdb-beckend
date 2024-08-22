@@ -17,6 +17,7 @@ export const login = async (
   if (!user) {
     throw new Error("User or password is not valid");
   }
+  console.log("user", user);
 
   const isMatch = await bcrypt.compare(password, user.password);
 
@@ -24,9 +25,13 @@ export const login = async (
     throw new Error("User or password is not valid");
   }
 
-  const token = jwt.sign({ id: user.id }, `${process.env.SECRET_KEY}`, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    { id: user.id, email: user.email },
+    `${process.env.SECRET_KEY}`,
+    {
+      expiresIn: "1d",
+    }
+  );
 
   return token;
 };

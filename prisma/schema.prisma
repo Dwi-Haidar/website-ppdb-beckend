@@ -35,6 +35,7 @@ model Ppdb {
   tahunLahirAyah String?
   pendidikanAyah String?
   pekerjaanAyah  String?
+  namaIbu        String?
   tahunLahirIbu  String?
   pendidikanIbu  String?
   pekerjaanIbu   String?

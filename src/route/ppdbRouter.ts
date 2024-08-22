@@ -8,10 +8,11 @@ import {
 import uploadMiddleware from "../middleware/upload";
 import { webhook } from "../controllers/webhook";
 import { sendEmail } from "../controllers/emailsend";
+import authentication from "../middleware/authentications";
 
 const ppdbRouter = Router();
 
-ppdbRouter.post("/ppdb", uploadMiddleware(), createPpdb);
+ppdbRouter.post("/ppdb", authentication, uploadMiddleware(), createPpdb);
 ppdbRouter.get("/ppdb/:id", getPpdb);
 ppdbRouter.get("/ppdb", getAllPpdb);
 ppdbRouter.delete("/ppdb/:id", deletePpdb);

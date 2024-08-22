@@ -33,6 +33,7 @@ const upload = multer({
   { name: "fotoGaleri", maxCount: 1 },
   { name: "fotoEktra", maxCount: 1 },
   { name: "fotoBerita", maxCount: 1 },
+  { name: "fotoBukti", maxCount: 1 },
 ]);
 
 const multerMiddleware = () => {
@@ -184,6 +185,19 @@ const multerMiddleware = () => {
               req.body.fotoBerita = fotoBeritaUrl.secure_url;
             }
           }
+          if(files.fotoBukti){
+            const fotoBuktiFile = files.fotoBukti[0];
+            if (fotoBuktiFile && fotoBuktiFile.path) {
+              const fotoBuktiUrl = await cloudinary.uploader.upload(
+                fotoBuktiFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoBukti = fotoBuktiUrl.secure_url;
+            }
+          }
+            
         } catch (error) {
           console.error("Error handling files:", error);
           return res.status(500).json({

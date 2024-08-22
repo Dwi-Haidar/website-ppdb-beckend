@@ -3,10 +3,10 @@ import uploadMiddleware from "../middleware/upload";
 import {
   createGaleri,
   deleteGaleri,
+  getAllGaleri,
   getGaleriById,
   updateGaleri,
 } from "../controllers/galeriController";
-import { getAllGaleri } from "../services/galeriService";
 
 const galeri = Router();
 galeri.post("/galeri", uploadMiddleware(), createGaleri);

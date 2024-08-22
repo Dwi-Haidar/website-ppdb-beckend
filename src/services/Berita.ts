@@ -31,7 +31,13 @@ export const getBeritaById = (id: number) => {
 
 export const getAllBerita = () => {
   try {
-    const berita = db.berita.findMany();
+    const berita = db.berita.findMany(
+        {
+            orderBy: {
+                createdAt: 'desc'
+            }
+        }
+    );
     return berita;
   } catch (error) {
     console.log(error);

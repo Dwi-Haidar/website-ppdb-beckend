@@ -31,16 +31,10 @@ export const create = async (
     const ppdb = await db.ppdb.create({
       data: {
         ...payload,
-        image: {
-          create: files.image.map((img) => ({
-            url: img.filename,
-          })),
-        },
         fotoMurid: files.fotoMurid ? files.fotoMurid[0].filename : "",
         fotoKK: files.fotoKK ? files.fotoKK[0].filename : "",
         fotoAkta: files.fotoAkta ? files.fotoAkta[0].filename : "",
         fotoIjazah: files.fotoIjazah ? files.fotoIjazah[0].filename : "",
-        
       },
     });
 

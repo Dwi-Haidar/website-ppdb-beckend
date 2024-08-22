@@ -14,7 +14,6 @@ model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
-  fotoBukti String?
   Ispaid    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -24,32 +23,32 @@ model User {
 
 model Ppdb {
   id             Int      @id @default(autoincrement())
-  nama           String
+  nama           String?
   userId         Int?
-  nisn           String   @unique
-  ttl            String
-  nik            String   @unique
+  nisn           String?  @unique
+  ttl            String?
+  nik            String?  @unique
   email          String   @unique
-  noKK           String   @unique
-  alamat         String
-  namaAyah       String
-  tahunLahirAyah String
-  pendidikanAyah String
-  pekerjaanAyah  String
-  namaIbu        String
-  tahunLahirIbu  String
-  pendidikanIbu  String
-  pekerjaanIbu   String
-  alamatOrtu     String
-  noTelp         String
+  noKK           String?  @unique
+  alamat         String?
+  namaAyah       String?
+  tahunLahirAyah String?
+  pendidikanAyah String?
+  pekerjaanAyah  String?
+  tahunLahirIbu  String?
+  pendidikanIbu  String?
+  pekerjaanIbu   String?
+  alamatOrtu     String?
+  noTelp         String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   isPaid         Boolean  @default(false)
   image          Image[]
-  fotoMurid      String
-  fotoKK         String
-  fotoIjazah     String
-  fotoAkta       String
+  fotoMurid      String?
+  fotoKK         String?
+  fotoIjazah     String?
+  fotoAkta       String?
+  fotoBukti      String?
 
   Kelulusan Kelulusan?
   Order     Order[]
@@ -87,10 +86,10 @@ model Order {
 }
 
 model EktraKulikuler {
-  id        Int    @id @default(autoincrement())
-  name      String
+  id        Int     @id @default(autoincrement())
+  name      String?
   fotoEktra String
-  Article   String
+  Article   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -98,9 +97,9 @@ model EktraKulikuler {
 
 model Galeri {
   id         Int      @id @default(autoincrement())
-  name       String
+  name       String?
   fotoGaleri String
-  Article    String
+  Article    String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

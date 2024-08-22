@@ -3,29 +3,29 @@ export type AuthMiddlewareData = {
 };
 
 export interface IPpdb {
-  nama: string;
-  nisn: string;
+  nama?: string;
+  nisn?: string;
   email: string;
-  ttl: string;
-  nik: string;
-  noKK: string;
-  alamat: string;
-  namaAyah: string;
-  tahunLahirAyah: string;
-  pendidikanAyah: string;
-  pekerjaanAyah: string;
-  namaIbu: string;
-  tahunLahirIbu: string;
-  pendidikanIbu: string;
-  pekerjaanIbu: string;
-  alamatOrtu: string;
-  fotoMurid: string;
-  fotoKK: string;
-  fotoIjazah: string;
-  fotoAkta: string;
-
+  ttl?: string;
+  nik?: string;
+  noKK?: string;
+  alamat?: string;
+  namaAyah?: string;
+  tahunLahirAyah?: string;
+  pendidikanAyah?: string;
+  pekerjaanAyah?: string;
+  namaIbu?: string;
+  tahunLahirIbu?: string;
+  pendidikanIbu?: string;
+  pekerjaanIbu?: string;
+  alamatOrtu?: string;
+  fotoMurid?: string;
+  fotoKK?: string;
+  fotoIjazah?: string;
+  fotoAkta?: string;
+  fotoBukti?: string;
   // image: string[];
-  noTelp: string;
+  noTelp?: string;
 }
 
 export interface IKelulusan {

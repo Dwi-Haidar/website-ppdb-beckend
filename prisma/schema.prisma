@@ -28,7 +28,7 @@ model Ppdb {
   nisn           String?  @unique
   ttl            String?
   nik            String?  @unique
-  email          String   @unique
+  email          String?  @unique
   noKK           String?  @unique
   alamat         String?
   namaAyah       String?

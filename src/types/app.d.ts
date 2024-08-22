@@ -5,7 +5,7 @@ export type AuthMiddlewareData = {
 export interface IPpdb {
   nama?: string;
   nisn?: string;
-  email: string;
+  email?: string;
   ttl?: string;
   nik?: string;
   noKK?: string;

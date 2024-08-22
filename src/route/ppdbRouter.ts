@@ -4,6 +4,7 @@ import {
   deletePpdb,
   getAllPpdb,
   getPpdb,
+  uploadBuktiPembayaran,
 } from "../controllers/ppdbController";
 import uploadMiddleware from "../middleware/upload";
 import { webhook } from "../controllers/webhook";
@@ -18,5 +19,11 @@ ppdbRouter.get("/ppdb", getAllPpdb);
 ppdbRouter.delete("/ppdb/:id", deletePpdb);
 ppdbRouter.post("/webhook", webhook);
 ppdbRouter.post("/sendEmail", sendEmail);
+ppdbRouter.post(
+  "/uploadBuktiPembayaran",
+  authentication,
+  uploadMiddleware(),
+  uploadBuktiPembayaran
+);
 
 export default ppdbRouter;

@@ -1,11 +1,14 @@
+import { Response } from "express";
 import db from "../db/index";
 import { IPpdb } from "../types/app";
 
 export const create = async (
   payload: IPpdb,
-  files: { [fieldname: string]: Express.Multer.File[] }
+  files: { [fieldname: string]: Express.Multer.File[] },
+  res: Response
 ) => {
   try {
+    const loginSession = res.locals.user;
     const existingPpdb = await db.ppdb.findFirst({
       where: {
         OR: [
@@ -28,7 +31,8 @@ export const create = async (
         throw new Error("Email sudah terdaftar");
       }
     }
-    const ppdb = await db.ppdb.create({
+    const ppdb = await db.ppdb.update({
+      where: { email: loginSession.email },
       data: {
         ...payload,
         fotoMurid: files.fotoMurid ? files.fotoMurid[0].filename : "",
@@ -125,4 +129,26 @@ export const deletePpdb = async (id: number) => {
     console.error("Error deleting PPDB:", error);
     throw error;
   }
+};
+
+export const uploadBuktiPembayaran = async (
+  res: Response,
+  files: {
+    [fieldname: string]: Express.Multer.File[];
+  }
+) => {
+  const loginSession = res.locals.user;
+
+  if (!loginSession) {
+    throw new Error("Unauthorized");
+  }
+  const upload = await db.ppdb.create({
+    data: {
+      fotoBukti: files.fotoBukti ? files.fotoBukti[0].filename : "",
+      userId: loginSession.id,
+      email: loginSession.email,
+    },
+  });
+
+  return upload;
 };

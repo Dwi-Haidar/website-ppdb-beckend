@@ -4,15 +4,14 @@ import * as ppdbService from "../services/ppdbService";
 export const createPpdb = async (req: Request, res: Response) => {
   try {
     const { body } = req;
-    console.log(body);
     const ppdb = await ppdbService.create(
       body,
-      req.files as { [fieldname: string]: Express.Multer.File[] }
+      req.files as { [fieldname: string]: Express.Multer.File[] },
+      res
     );
-    console.log(ppdb);
     res.json({
       status: true,
-      message: "Create Success",
+      message: "Update Data PPOB Success",
       data: ppdb,
     });
   } catch (error) {
@@ -66,6 +65,26 @@ export const deletePpdb = async (req: Request, res: Response) => {
       status: true,
       message: "Delete Success",
       data: ppdb,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const uploadBuktiPembayaran = async (req: Request, res: Response) => {
+  try {
+    const upload = await ppdbService.uploadBuktiPembayaran(
+      res,
+      req.files as { [fieldname: string]: Express.Multer.File[] }
+    );
+    res.json({
+      status: true,
+      message: "Create/Upload Bukti Pembayaran Success",
+      data: upload,
     });
   } catch (error) {
     console.log(error);

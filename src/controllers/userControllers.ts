@@ -3,8 +3,8 @@ import * as userService from "../services/userService";
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
-    const token = await userService.login(username, password);
+    const { email, password } = req.body;
+    const token = await userService.login(email, password);
     res.json({
       status: true,
       message: "Login Success",
@@ -21,8 +21,8 @@ export const login = async (req: Request, res: Response) => {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
-    const user = await userService.register(username, password);
+    const { email, password } = req.body;
+    const user = await userService.register(email, password);
     res.json({
       status: true,
       message: "Register Success",

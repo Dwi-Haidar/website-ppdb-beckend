@@ -5,18 +5,19 @@ const prisma = new PrismaClient();
 import db from "../db/index";
 
 export const login = async (
-  username: string,
+  email: string,
   password: string
 ): Promise<string> => {
   const user = await db.user.findFirst({
     where: {
-      username: username,
+      email: email,
     },
   });
 
   if (!user) {
     throw new Error("User or password is not valid");
   }
+  console.log("user", user);
 
   const isMatch = await bcrypt.compare(password, user.password);
 
@@ -24,19 +25,23 @@ export const login = async (
     throw new Error("User or password is not valid");
   }
 
-  const token = jwt.sign({ id: user.id }, `${process.env.SECRET_KEY}`, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    { id: user.id, email: user.email },
+    `${process.env.SECRET_KEY}`,
+    {
+      expiresIn: "1d",
+    }
+  );
 
   return token;
 };
 
-export const register = async (username: string, password: string) => {
+export const register = async (email: string, password: string) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
-        username,
+        email,
         password: hashedPassword,
       },
     });

@@ -8,7 +8,10 @@ import {
 } from "../controllers/ppdbController";
 import uploadMiddleware from "../middleware/upload";
 import { webhook } from "../controllers/webhook";
-import { sendEmail } from "../controllers/emailsend";
+import {
+  sendEmail,
+  sendEmailVerifPembayaranFormulir,
+} from "../controllers/emailsend";
 import authentication from "../middleware/authentications";
 
 const ppdbRouter = Router();
@@ -19,6 +22,10 @@ ppdbRouter.get("/ppdb", getAllPpdb);
 ppdbRouter.delete("/ppdb/:id", deletePpdb);
 ppdbRouter.post("/webhook", webhook);
 ppdbRouter.post("/sendEmail", sendEmail);
+ppdbRouter.post(
+  "/sendEmailPembayaranFormulir",
+  sendEmailVerifPembayaranFormulir
+);
 ppdbRouter.post(
   "/uploadBuktiPembayaran",
   authentication,

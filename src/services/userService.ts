@@ -5,12 +5,12 @@ const prisma = new PrismaClient();
 import db from "../db/index";
 
 export const login = async (
-  username: string,
+  email: string,
   password: string
 ): Promise<string> => {
   const user = await db.user.findFirst({
     where: {
-      username: username,
+      email: email,
     },
   });
 
@@ -31,12 +31,12 @@ export const login = async (
   return token;
 };
 
-export const register = async (username: string, password: string) => {
+export const register = async (email: string, password: string) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
-        username,
+        email,
         password: hashedPassword,
       },
     });

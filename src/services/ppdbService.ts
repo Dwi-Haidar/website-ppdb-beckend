@@ -1,6 +1,7 @@
-import { Response } from "express";
+import { Response, Request } from "express";
 import db from "../db/index";
 import { IPpdb } from "../types/app";
+import { PrismaClient } from "@prisma/client";
 
 export const create = async (
   payload: IPpdb,
@@ -107,12 +108,28 @@ export const getPpdb = async (email: string) => {
   }
 };
 
-export const getsPpdb = async (email: string) => {
+export const getsPpdb = async (req: Request) => {
   try {
+    const params = req.query as any;
+
+    const arrQuery: any = {};
+    if (params.email) {
+      arrQuery.email = params.email.toString();
+    }
+    if (params.isVerified) {
+      arrQuery.isVerified = params.isVerified === "true";
+    }
+
+    let page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    let limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+    const skip = (page - 1) * limit;
     const ppdb = await db.ppdb.findMany({
+      where: arrQuery,
       include: { image: true, Kelulusan: true, Order: true },
-      where: { email, isVerified: true },
+      take: limit,
+      skip: skip,
     });
+
     return ppdb;
   } catch (error) {
     console.error("Error fetching all PPDB:", error);

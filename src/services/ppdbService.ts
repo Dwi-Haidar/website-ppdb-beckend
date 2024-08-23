@@ -94,10 +94,10 @@ export const create = async (
   }
 };
 
-export const getPpdb = async (id: number) => {
+export const getPpdb = async (email: string) => {
   try {
     const ppdb = await db.ppdb.findUnique({
-      where: { id },
+      where: { email },
       include: { image: true, Kelulusan: true, Order: true },
     });
     return ppdb;
@@ -107,10 +107,11 @@ export const getPpdb = async (id: number) => {
   }
 };
 
-export const getsPpdb = async () => {
+export const getsPpdb = async (email: string) => {
   try {
     const ppdb = await db.ppdb.findMany({
       include: { image: true, Kelulusan: true, Order: true },
+      where: { email, isVerified: true },
     });
     return ppdb;
   } catch (error) {
@@ -151,4 +152,17 @@ export const uploadBuktiPembayaran = async (
   });
 
   return upload;
+};
+
+export const updatePpdb = async (id: number, payload: IPpdb) => {
+  try {
+    const ppdb = await db.ppdb.update({
+      where: { id },
+      data: payload,
+    });
+    return ppdb;
+  } catch (error) {
+    console.error("Error updating PPDB:", error);
+    throw error;
+  }
 };

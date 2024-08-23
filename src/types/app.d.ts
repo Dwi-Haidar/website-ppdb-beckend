@@ -24,6 +24,8 @@ export interface IPpdb {
   fotoIjazah?: string;
   fotoAkta?: string;
   fotoBukti?: string;
+  
+
   // image: string[];
   noTelp?: string;
 }

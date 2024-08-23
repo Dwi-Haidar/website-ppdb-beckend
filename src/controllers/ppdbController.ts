@@ -10,7 +10,7 @@ export const createPpdb = async (req: Request, res: Response) => {
       res
     );
     res.json({
-      status: true,
+      status: 200,
       message: "Update Data PPOB Success",
       data: ppdb,
     });
@@ -24,8 +24,8 @@ export const createPpdb = async (req: Request, res: Response) => {
 };
 export const getPpdb = async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    const ppdb = await ppdbService.getPpdb(id);
+    const email = req.params.email;
+    const ppdb = await ppdbService.getPpdb(email);
     res.json({
       status: true,
       message: "Get Success",
@@ -42,9 +42,9 @@ export const getPpdb = async (req: Request, res: Response) => {
 
 export const getAllPpdb = async (req: Request, res: Response) => {
   try {
-    const ppdb = await ppdbService.getsPpdb();
+    const ppdb = await ppdbService.getsPpdb(req);
     res.json({
-      status: true,
+      status: 200,
       message: "Get Success",
       data: ppdb,
     });

@@ -17,7 +17,7 @@ import authentication from "../middleware/authentications";
 const ppdbRouter = Router();
 
 ppdbRouter.post("/ppdb", authentication, uploadMiddleware(), createPpdb);
-ppdbRouter.get("/ppdb/:id", getPpdb);
+// ppdbRouter.get("/ppdb/", getPpdb);
 ppdbRouter.get("/ppdb", getAllPpdb);
 ppdbRouter.delete("/ppdb/:id", deletePpdb);
 ppdbRouter.post("/webhook", webhook);

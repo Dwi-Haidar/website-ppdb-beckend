@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import db from "../db/index";
 import { IPpdb } from "../types/app";
-import { PrismaClient } from "@prisma/client";
 
 export const create = async (
   payload: IPpdb,
@@ -28,14 +27,39 @@ export const create = async (
         throw new Error("NISN sudah terdaftar");
       } else if (existingPpdb.noKK === payload.noKK) {
         throw new Error("NoKK sudah terdaftar");
-      } else if (existingPpdb.email === payload.email) {
-        throw new Error("Email sudah terdaftar");
       }
     }
+    const datas = {
+      id: Number(payload.id),
+      nama: payload.nama,
+      nisn: payload.nisn,
+      email: payload.email,
+      ttl: payload.ttl,
+      nik: payload.nik,
+      noKK: payload.noKK,
+      alamat: payload.alamat,
+      namaAyah: payload.namaAyah,
+      tahunLahirAyah: payload.tahunLahirAyah,
+      pendidikanAyah: payload.pendidikanAyah,
+      pekerjaanAyah: payload.pekerjaanAyah,
+      namaIbu: payload.namaIbu,
+      tahunLahirIbu: payload.tahunLahirIbu,
+      pendidikanIbu: payload.pendidikanIbu,
+      pekerjaanIbu: payload.pekerjaanIbu,
+      alamatOrtu: payload.alamatOrtu,
+      fotoMurid: payload.fotoMurid,
+      fotoKK: payload.fotoKK,
+      fotoIjazah: payload.fotoIjazah,
+      fotoAkta: payload.fotoAkta,
+      fotoBukti: payload.fotoBukti,
+      noTelp: payload.noTelp,
+    };
+    console.log("payload", payload);
+
     const ppdb = await db.ppdb.update({
       where: { email: loginSession.email },
       data: {
-        ...payload,
+        ...datas,
         fotoMurid: files.fotoMurid ? files.fotoMurid[0].filename : "",
         fotoKK: files.fotoKK ? files.fotoKK[0].filename : "",
         fotoAkta: files.fotoAkta ? files.fotoAkta[0].filename : "",
@@ -169,17 +193,4 @@ export const uploadBuktiPembayaran = async (
   });
 
   return upload;
-};
-
-export const updatePpdb = async (id: number, payload: IPpdb) => {
-  try {
-    const ppdb = await db.ppdb.update({
-      where: { id },
-      data: payload,
-    });
-    return ppdb;
-  } catch (error) {
-    console.error("Error updating PPDB:", error);
-    throw error;
-  }
 };

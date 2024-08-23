@@ -3,6 +3,7 @@ export type AuthMiddlewareData = {
 };
 
 export interface IPpdb {
+  id: number;
   nama?: string;
   nisn?: string;
   email?: string;
@@ -24,7 +25,6 @@ export interface IPpdb {
   fotoIjazah?: string;
   fotoAkta?: string;
   fotoBukti?: string;
-  
 
   // image: string[];
   noTelp?: string;

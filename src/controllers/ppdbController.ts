@@ -10,7 +10,7 @@ export const createPpdb = async (req: Request, res: Response) => {
       res
     );
     res.json({
-      status: true,
+      status: 200,
       message: "Update Data PPOB Success",
       data: ppdb,
     });
@@ -44,7 +44,7 @@ export const getAllPpdb = async (req: Request, res: Response) => {
   try {
     const ppdb = await ppdbService.getsPpdb(req);
     res.json({
-      status: true,
+      status: 200,
       message: "Get Success",
       data: ppdb,
     });
@@ -85,28 +85,6 @@ export const uploadBuktiPembayaran = async (req: Request, res: Response) => {
       status: true,
       message: "Create/Upload Bukti Pembayaran Success",
       data: upload,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      status: false,
-      message: "Internal Server Error",
-    });
-  }
-};
-
-export const updatePpdb = async (req: Request, res: Response) => {
-  try {
-    const id = parseInt(req.params.id, 10);
-    const ppdb = await ppdbService.updatePpdb(
-      id,
-      req.body
-      // req.files as { [fieldname: string]: Express.Multer.File[] }
-    );
-    res.json({
-      status: true,
-      message: "Update Success",
-      data: ppdb,
     });
   } catch (error) {
     console.log(error);

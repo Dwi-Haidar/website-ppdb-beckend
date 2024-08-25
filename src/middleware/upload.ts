@@ -34,6 +34,8 @@ const upload = multer({
   { name: "fotoEktra", maxCount: 1 },
   { name: "fotoBerita", maxCount: 1 },
   { name: "fotoBukti", maxCount: 1 },
+  { name: "fotoSKL", maxCount: 1 },
+  { name: "fotoPrestasi", maxCount: 1 },
 ]);
 
 const multerMiddleware = () => {
@@ -58,7 +60,7 @@ const multerMiddleware = () => {
           });
         }
       }
-
+      
       if (req.files) {
         try {
           const files = req.files as {
@@ -185,7 +187,7 @@ const multerMiddleware = () => {
               req.body.fotoBerita = fotoBeritaUrl.secure_url;
             }
           }
-          if(files.fotoBukti){
+          if (files.fotoBukti) {
             const fotoBuktiFile = files.fotoBukti[0];
             if (fotoBuktiFile && fotoBuktiFile.path) {
               const fotoBuktiUrl = await cloudinary.uploader.upload(
@@ -197,7 +199,32 @@ const multerMiddleware = () => {
               req.body.fotoBukti = fotoBuktiUrl.secure_url;
             }
           }
-            
+          if (files.fotoPrestasi) {
+            const fotoPrestasiFile = files.fotoPrestasi[0];
+            if (fotoPrestasiFile && fotoPrestasiFile.path) {
+              const fotoPrestasiUrl = await cloudinary.uploader.upload(
+                fotoPrestasiFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoPrestasi = fotoPrestasiUrl.secure_url;
+            }
+          }
+          if (files.fotoSKL){
+            const fotoSKLFile = files.fotoSKL[0];
+            if (fotoSKLFile && fotoSKLFile.path) {
+              const fotoSKLUrl = await cloudinary.uploader.upload(
+                fotoSKLFile.path,
+                {
+                  folder: "PPDB",
+                }
+              );
+              req.body.fotoSKL = fotoSKLUrl.secure_url;
+            }
+          }
+
+             
         } catch (error) {
           console.error("Error handling files:", error);
           return res.status(500).json({

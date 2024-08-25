@@ -4,6 +4,7 @@ import {
   deletePpdb,
   getAllPpdb,
   getPpdb,
+  updatePpdb,
   uploadBuktiPembayaran,
 } from "../controllers/ppdbController";
 import uploadMiddleware from "../middleware/upload";
@@ -17,7 +18,7 @@ import authentication from "../middleware/authentications";
 const ppdbRouter = Router();
 
 ppdbRouter.post("/ppdb", authentication, uploadMiddleware(), createPpdb);
-// ppdbRouter.get("/ppdb/", getPpdb);
+ppdbRouter.get("/ppdb/:id", getPpdb);
 ppdbRouter.get("/ppdb", getAllPpdb);
 ppdbRouter.delete("/ppdb/:id", deletePpdb);
 ppdbRouter.post("/webhook", webhook);
@@ -32,5 +33,6 @@ ppdbRouter.post(
   uploadMiddleware(),
   uploadBuktiPembayaran
 );
+ppdbRouter.put("/ppdb/:id",  uploadMiddleware(), updatePpdb);
 
 export default ppdbRouter;

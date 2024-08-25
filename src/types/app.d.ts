@@ -23,6 +23,7 @@ export interface IPpdb {
   fotoMurid?: string;
   fotoKK?: string;
   fotoIjazah?: string;
+  fotoSKL: string;
   fotoAkta?: string;
   fotoBukti?: string;
 
@@ -56,5 +57,11 @@ export interface IBerita {
   id: number;
   name: string;
   fotoBerita: string;
+  Article: string;
+}
+export interface IPrestasi {
+  id: number;
+  name: string;
+  fotoPrestasi: string;
   Article: string;
 }

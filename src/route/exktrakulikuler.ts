@@ -15,6 +15,10 @@ exktrakulikuler.post(
 );
 exktrakulikuler.get("/exktrakulikuler", getAllEktrakulikuler);
 exktrakulikuler.get("/exktrakulikuler/:id", getEktrakulikulerById);
-exktrakulikuler.put("/exktrakulikuler/:id", updateEktrakulikuler);
+exktrakulikuler.put(
+  "/exktrakulikuler/:id",
+  uploadMiddleware(),
+  updateEktrakulikuler
+);
 exktrakulikuler.delete("/exktrakulikuler/:id", deleteEktrakulikuler);
 export default exktrakulikuler;

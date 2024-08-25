@@ -24,8 +24,8 @@ export const createPpdb = async (req: Request, res: Response) => {
 };
 export const getPpdb = async (req: Request, res: Response) => {
   try {
-    const email = req.params.email;
-    const ppdb = await ppdbService.getPpdb(email);
+    const id = parseInt(req.params.id, 10);
+    const ppdb = await ppdbService.getPpdb(id);
     res.json({
       status: true,
       message: "Get Success",
@@ -94,3 +94,23 @@ export const uploadBuktiPembayaran = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+
+export const updatePpdb = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const ppdb = await ppdbService.updatePpdb(id, req.body);
+    res.json({
+      status: true,
+      message: "Update Success",
+      data: ppdb,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
+    });
+  }
+}

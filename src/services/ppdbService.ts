@@ -64,6 +64,7 @@ export const create = async (
         fotoKK: files.fotoKK ? files.fotoKK[0].filename : "",
         fotoAkta: files.fotoAkta ? files.fotoAkta[0].filename : "",
         fotoIjazah: files.fotoIjazah ? files.fotoIjazah[0].filename : "",
+        fotoSKL: files.fotoSKL ? files.fotoSKL[0].filename : "",
       },
     });
 
@@ -119,10 +120,10 @@ export const create = async (
   }
 };
 
-export const getPpdb = async (email: string) => {
+export const getPpdb = async (id: number) => {
   try {
     const ppdb = await db.ppdb.findUnique({
-      where: { email },
+      where: { id },
       include: { image: true, Kelulusan: true, Order: true },
     });
     return ppdb;
@@ -194,3 +195,17 @@ export const uploadBuktiPembayaran = async (
 
   return upload;
 };
+
+
+export const  updatePpdb = async (id: number, payload: Partial<IPpdb>) => {
+  try {
+    const ppdb = await db.ppdb.update({
+      where: { id },
+      data: payload,
+    });
+    return ppdb;
+  } catch (error) {
+    console.error("Error updating PPDB:", error);
+    throw error;
+  }
+}

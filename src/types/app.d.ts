@@ -8,6 +8,7 @@ export interface IPpdb {
   nisn?: string;
   email?: string;
   ttl?: string;
+  tempat?: string;
   nik?: string;
   noKK?: string;
   alamat?: string;

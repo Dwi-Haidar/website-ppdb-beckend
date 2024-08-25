@@ -53,6 +53,7 @@ export const create = async (
       fotoAkta: payload.fotoAkta,
       fotoBukti: payload.fotoBukti,
       noTelp: payload.noTelp,
+      tempat: payload.tempat,
     };
     console.log("payload", payload);
 
@@ -196,8 +197,7 @@ export const uploadBuktiPembayaran = async (
   return upload;
 };
 
-
-export const  updatePpdb = async (id: number, payload: Partial<IPpdb>) => {
+export const updatePpdb = async (id: number, payload: Partial<IPpdb>) => {
   try {
     const ppdb = await db.ppdb.update({
       where: { id },
@@ -208,4 +208,4 @@ export const  updatePpdb = async (id: number, payload: Partial<IPpdb>) => {
     console.error("Error updating PPDB:", error);
     throw error;
   }
-}
+};

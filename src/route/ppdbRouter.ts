@@ -11,6 +11,7 @@ import uploadMiddleware from "../middleware/upload";
 import { webhook } from "../controllers/webhook";
 import {
   sendEmail,
+  sendEmailMelakukanPembayaran,
   sendEmailVerifPembayaranFormulir,
 } from "../controllers/emailsend";
 import authentication from "../middleware/authentications";
@@ -33,6 +34,7 @@ ppdbRouter.post(
   uploadMiddleware(),
   uploadBuktiPembayaran
 );
-ppdbRouter.put("/ppdb/:id",  uploadMiddleware(), updatePpdb);
+ppdbRouter.post("/sendEmailMelakukanPembayaran", sendEmailMelakukanPembayaran);
+ppdbRouter.put("/ppdb/:id", uploadMiddleware(), updatePpdb);
 
 export default ppdbRouter;

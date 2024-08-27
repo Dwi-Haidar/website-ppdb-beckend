@@ -61,8 +61,8 @@ export const sendEmailVerifPembayaranFormulir = async (
   res: Response
 ) => {
   try {
-    const { email, name, link } = req.body;
-
+    const { email, nama } = req.body;
+    const link = "http://localhost:5173/ppdbonline";
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
@@ -79,7 +79,7 @@ export const sendEmailVerifPembayaranFormulir = async (
       to: email,
       subject: "Pembayaran awal Formulir",
       html: `
-        <p>Terimakasih  ${name},</p>
+        <p>Terimakasih  ${nama},</p>
           <p>Terima kasih telah melakukan pembayaran awal formulir untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
 
           <p>Dengan ini kami mengonfirmasi bahwa pembayaran Anda telah diterima. Selanjutnya, Anda diharapkan untuk melakukan langkah berikut:</p>
@@ -113,8 +113,8 @@ export const sendEmailMelakukanPembayaran = async (
   res: Response
 ) => {
   try {
-    const { email, name, link } = req.body;
-
+    const { email, name } = req.body;
+    const link = "http://localhost:5173/pembayaran";
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
@@ -129,18 +129,14 @@ export const sendEmailMelakukanPembayaran = async (
     const mailOptions = {
       from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`,
       to: email,
-      subject: "Pembayaran awal Formulir",
+      subject: "Pembayaran PPOB",
       html: `
-        <p>Terimakasih  ${name},</p>
-          <p>Terima kasih telah melakukan pembayaran awal formulir untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
-
-          <p>Dengan ini kami mengonfirmasi bahwa pembayaran Anda telah diterima. Selanjutnya, Anda diharapkan untuk melakukan langkah berikut:</p>
-
+        <p>Diharapkan  ${name},</p>
+          <p>Melakukan Pembayaran PPOB untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
           <p>Dengan Mengklick tombol dibawah ini</p>
-          <p>Terimakasih.</p>
 
         <p>
-          <a href="${link}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Konfirmasi Kehadiran</a>
+          <a href="${link}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Bayar</a>
         </p>
       `,
     };

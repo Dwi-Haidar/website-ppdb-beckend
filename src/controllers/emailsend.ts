@@ -113,8 +113,8 @@ export const sendEmailMelakukanPembayaran = async (
   res: Response
 ) => {
   try {
-    const { email, name } = req.body;
-    const link = "http://localhost:5173/pembayaran";
+    const { email, nama } = req.body;
+    const link = "http://localhost:5173/payment-page";
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
@@ -129,10 +129,10 @@ export const sendEmailMelakukanPembayaran = async (
     const mailOptions = {
       from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`,
       to: email,
-      subject: "Pembayaran PPOB",
+      subject: "Pembayaran PPDB",
       html: `
-        <p>Diharapkan  ${name},</p>
-          <p>Melakukan Pembayaran PPOB untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
+        <p>Diharapkan  ${nama},</p>
+          <p>Melakukan Pembayaran PPDB untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
           <p>Dengan Mengklick tombol dibawah ini</p>
 
         <p>

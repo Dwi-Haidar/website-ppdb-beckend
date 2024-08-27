@@ -26,6 +26,7 @@ export interface IPpdb {
   fotoIjazah?: string;
   fotoSKL: string;
   fotoAkta?: string;
+  isDataValid: boolean;
   fotoBukti?: string;
 
   // image: string[];

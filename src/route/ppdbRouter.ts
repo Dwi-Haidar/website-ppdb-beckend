@@ -15,8 +15,10 @@ import {
   sendEmailVerifPembayaranFormulir,
 } from "../controllers/emailsend";
 import authentication from "../middleware/authentications";
+import { createPayment } from "../controllers/paymentController";
 
 const ppdbRouter = Router();
+ppdbRouter.post("/paymentPage", authentication, createPayment);
 
 ppdbRouter.post("/ppdb", authentication, uploadMiddleware(), createPpdb);
 ppdbRouter.get("/ppdb/:id", getPpdb);

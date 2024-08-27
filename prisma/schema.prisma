@@ -46,6 +46,7 @@ model Ppdb {
   updatedAt      DateTime   @updatedAt
   isPaid         Boolean    @default(false)
   isVerified     Boolean    @default(false)
+  isDataValid    Boolean    @default(false)
   image          Image[]
   fotoMurid      String?
   fotoKK         String?

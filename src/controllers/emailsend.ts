@@ -63,7 +63,6 @@ export const sendEmailVerifPembayaranFormulir = async (
   try {
     const { email, nama } = req.body;
     const link = "http://localhost:5173/ppdbonline";
-    console.log(req.body, "cobain apa");
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
@@ -90,6 +89,54 @@ export const sendEmailVerifPembayaranFormulir = async (
 
         <p>
           <a href="${link}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Konfirmasi Kehadiran</a>
+        </p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        return res.status(500).send("Failed to send email");
+      }
+      console.log("Email sent:", info.response);
+      console.log("Message sent: %s", info.messageId);
+      res.status(200).send("Email sent successfully");
+    });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).send("Failed to send email");
+  }
+};
+
+export const sendEmailMelakukanPembayaran = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { email, name } = req.body;
+    const link = "http://localhost:5173/pembayaran";
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `"SMPI Karya Mukti" <${process.env.GMAIL_USER}>`,
+      to: email,
+      subject: "Pembayaran PPOB",
+      html: `
+        <p>Diharapkan  ${name},</p>
+          <p>Melakukan Pembayaran PPOB untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
+          <p>Dengan Mengklick tombol dibawah ini</p>
+
+        <p>
+          <a href="${link}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Bayar</a>
         </p>
       `,
     };

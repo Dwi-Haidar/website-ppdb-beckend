@@ -11,11 +11,14 @@ import uploadMiddleware from "../middleware/upload";
 import { webhook } from "../controllers/webhook";
 import {
   sendEmail,
+  sendEmailMelakukanPembayaran,
   sendEmailVerifPembayaranFormulir,
 } from "../controllers/emailsend";
 import authentication from "../middleware/authentications";
+import { createPayment } from "../controllers/paymentController";
 
 const ppdbRouter = Router();
+ppdbRouter.post("/paymentPage", authentication, createPayment);
 
 ppdbRouter.post("/ppdb", authentication, uploadMiddleware(), createPpdb);
 ppdbRouter.get("/ppdb/:id", getPpdb);
@@ -33,6 +36,7 @@ ppdbRouter.post(
   uploadMiddleware(),
   uploadBuktiPembayaran
 );
-ppdbRouter.put("/ppdb/:id",  uploadMiddleware(), updatePpdb);
+ppdbRouter.post("/sendEmailMelakukanPembayaran", sendEmailMelakukanPembayaran);
+ppdbRouter.put("/ppdb/:id", uploadMiddleware(), updatePpdb);
 
 export default ppdbRouter;

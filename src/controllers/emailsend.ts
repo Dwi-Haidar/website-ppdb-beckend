@@ -61,8 +61,9 @@ export const sendEmailVerifPembayaranFormulir = async (
   res: Response
 ) => {
   try {
-    const { email, name, link } = req.body;
-
+    const { email, nama } = req.body;
+    const link = "http://localhost:5173/ppdbonline";
+    console.log(req.body, "cobain apa");
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
@@ -79,7 +80,7 @@ export const sendEmailVerifPembayaranFormulir = async (
       to: email,
       subject: "Pembayaran awal Formulir",
       html: `
-        <p>Terimakasih  ${name},</p>
+        <p>Terimakasih  ${nama},</p>
           <p>Terima kasih telah melakukan pembayaran awal formulir untuk penerimaan siswa/i baru SMPI Karya Mukti.</p>
 
           <p>Dengan ini kami mengonfirmasi bahwa pembayaran Anda telah diterima. Selanjutnya, Anda diharapkan untuk melakukan langkah berikut:</p>
